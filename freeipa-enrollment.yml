@@ -1,0 +1,27 @@
+---
+- name: freeipa-enrollment
+  hosts: '{{ target }}'
+  become: True
+  become_user: root
+  tasks:
+    - name: freeipa client
+      package:
+        name: "{% if ansible_os_family == 'Debian' %}freeipa-client{% elif ansible_os_family == 'RedHat' %}ipa-client{% endif %}"
+        state: present
+        packages:
+
+    - name: dhclient override (RHEL ec2/various other cloud providers)
+      lineinfile:
+        path: /etc/dhcp/dhclient.conf
+        line: supersede domain-search {{ ipa_domain }}
+      when: ansible_os_family == 'RedHat'
+
+    - name: dhclient renew (RHEL ec2/various other cloud providers)
+      shell: dhclient -r && dhclient
+      when: ansible_os_family == 'RedHat'
+
+    - name: set hostname
+      shell: hostnamectl set-hostname {{ client_hostname }}
+
+    - name: enroll
+      shell: yes | ipa-client-install --mkhomedir --hostname=$(hostname -f) --domain={{ ipa_domain }} --server={{ ipa_server_shortname }}.{{ ipa_domain }} --no-dns --no-ntp --principal={{ enrollment_user }} --password={{ enrollment_password }}
