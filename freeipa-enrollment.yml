@@ -8,7 +8,6 @@
       package:
         name: "{% if ansible_os_family == 'Debian' %}freeipa-client{% elif ansible_os_family == 'RedHat' %}ipa-client{% endif %}"
         state: present
-        packages:
 
     - name: dhclient override (RHEL ec2/various other cloud providers)
       lineinfile:
