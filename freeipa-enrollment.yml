@@ -15,9 +15,9 @@
         line: supersede domain-search {{ ipa_domain }}
       when: ansible_os_family == 'RedHat'
 
-    - name: dhclient renew (RHEL ec2/various other cloud providers)
-      shell: dhclient -r && dhclient
-      when: ansible_os_family == 'RedHat'
+#    - name: dhclient renew (RHEL ec2/various other cloud providers)
+#      shell: dhclient -r && dhclient
+#      when: ansible_os_family == 'RedHat'
 
     - name: set hostname
       shell: hostnamectl set-hostname {{ client_hostname }}
