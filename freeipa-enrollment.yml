@@ -9,11 +9,11 @@
         name: "{% if ansible_os_family == 'Debian' %}freeipa-client{% elif ansible_os_family == 'RedHat' %}ipa-client{% endif %}"
         state: present
 
-    - name: dhclient override (RHEL ec2/various other cloud providers)
-      lineinfile:
-        path: /etc/dhcp/dhclient.conf
-        line: supersede domain-search {{ ipa_domain }}
-      when: ansible_os_family == 'RedHat'
+#    - name: dhclient override (RHEL ec2/various other cloud providers)
+#      lineinfile:
+#        path: /etc/dhcp/dhclient.conf
+#        line: supersede domain-search {{ ipa_domain }}
+#      when: ansible_os_family == 'RedHat'
 
 #    - name: dhclient renew (RHEL ec2/various other cloud providers)
 #      shell: dhclient -r && dhclient
